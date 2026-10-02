@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tok Eczanesi | IBAN</title>
+<style>
+  :root { --green:#D0202B; --red:#E5545B; --ink:#1E2B24; --muted:#5A6B62; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:linear-gradient(160deg,#FEF4F4 0%,#FFFFFF 55%,#FBE6E7 100%); color:var(--ink); font-family:Poppins,Arial,Helvetica,sans-serif; }
+  body { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; position:relative; overflow:hidden; }
+  body::before { content:""; position:absolute; top:-120px; left:-120px; width:300px; height:300px; border-radius:50%; background:rgba(208,32,43,.12); }
+  body::after { content:""; position:absolute; bottom:-140px; right:-140px; width:320px; height:320px; border-radius:50%; background:rgba(208,32,43,.14); }
+  .plus { position:absolute; width:34px; height:34px; opacity:.5; }
+  .plus::before,.plus::after { content:""; position:absolute; background:var(--green); border-radius:3px; }
+  .plus::before { left:12px; top:0; width:10px; height:34px; }
+  .plus::after { left:0; top:12px; width:34px; height:10px; }
+  .logo-cross { width:56px; height:56px; margin:0 auto 12px; display:block; }
+  main { position:relative; z-index:1; width:100%; max-width:420px; text-align:center; }
+  .brand { font-family:Georgia,'Times New Roman',serif; font-weight:700; color:var(--green); font-size:38px; margin:0 0 26px; line-height:1; }
+  .sub { font-family:Georgia,'Times New Roman',serif; font-weight:700; color:var(--red); letter-spacing:4px; font-size:15px; margin:6px 0 28px; }
+  h1 { font-size:22px; margin:0 0 18px; }
+  .card { background:#fff; border:2px solid var(--green); border-radius:20px; padding:22px 18px; text-align:left; box-shadow:0 6px 20px rgba(208,32,43,.12); }
+  .label { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin:0 0 2px; }
+  .value { font-size:17px; font-weight:600; margin:0 0 16px; }
+  .iban { font-size:19px; font-weight:700; letter-spacing:1px; word-break:break-word; margin:0 0 4px; color:var(--green); }
+  button { width:100%; margin-top:20px; padding:16px; border:0; border-radius:999px; background:var(--green); color:#fff; font-size:17px; font-weight:700; font-family:inherit; cursor:pointer; }
+  button:active { transform:scale(.98); }
+  .note { font-size:13px; color:var(--muted); margin-top:16px; }
+</style>
+</head>
+<body>
+<span class="plus" style="top:70px;right:40px"></span>
+<span class="plus" style="top:34%;left:22px;transform:scale(.6)"></span>
+<span class="plus" style="bottom:36px;left:28px;transform:scale(.8)"></span>
+<span class="plus" style="bottom:38%;right:26px;transform:scale(.5)"></span>
+<main>
+  <svg class="logo-cross" viewBox="0 0 56 56" aria-hidden="true"><rect x="2" y="2" width="52" height="52" rx="14" fill="#D0202B"/><path d="M23 13h10v10h10v10H33v10H23V33H13V23h10z" fill="#fff"/></svg>
+  <p class="brand">TOK ECZANESİ</p>
+  <h1>Ödeme Bilgileri</h1>
+  <div class="card">
+    <p class="label">Hesap Sahibi</p>
+    <p class="value" id="holder">ELİF TOK</p>
+    <p class="label">Banka</p>
+    <p class="value" id="bank">Yapı Kredi Bankası</p>
+    <p class="label">IBAN</p>
+    <p class="iban" id="iban">TR02 0006 7010 0000 0055 2488 37</p>
+    <button id="copy" type="button">IBAN'ı kopyala</button>
+  </div>
+  <p class="note" id="msg">Kopyalamak için butona dokunun.</p>
+</main>
+<script>
+  document.getElementById('copy').addEventListener('click', function () {
+    var text = document.getElementById('iban').textContent.replace(/\s/g, '');
+    var msg = document.getElementById('msg');
+    function ok() { msg.textContent = 'IBAN kopyalandı ✓'; msg.style.color = '#1E8E4A'; }
+    function fallback() {
+      var t = document.createElement('textarea');
+      t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); ok(); } catch (e) { msg.textContent = 'Kopyalanamadı, IBAN\'ı elle seçin.'; }
+      document.body.removeChild(t);
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else { fallback(); }
+  });
+</script>
+</body>
+</html>
